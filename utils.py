@@ -15,27 +15,25 @@ def sendImage(client: socket, path: str):
     :param client is socket
     :param path is relative path to image
     """
-    f = open(path, mode='rb')
-    image_chunk = f.read(1024)
-    while (image_chunk):
-        client.send(image_chunk)
+    with open(path, "rb") as f:
         image_chunk = f.read(1024)
-    f.close()
+        while image_chunk:
+            client.send(image_chunk)
+            image_chunk = f.read(1024)
+            if not image_chunk:
+                break
 
 def saveImage2File(conn: socket, path: str):
     """
     docs
     """
     with open(path, "wb") as f:
-        while True:
-            bytes_msg = conn.recv(1024)
-            if not bytes_msg:
+        image_chunk = conn.recv(1024)
+        while image_chunk:
+            f.write(image_chunk)
+            image_chunk = conn.recv(1024)
+            if not image_chunk:
                 break
-            f.write(bytes_msg)
-        # image_chunk = conn.recv(1024)
-        # while image_chunk:
-        #     f.write(image_chunk)
-        #     image_chunk = conn.recv(1024)
 
 def greaseImage(path: str, amount: float):
     # source https://quares.ru/?id=127705

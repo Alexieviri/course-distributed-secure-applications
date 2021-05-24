@@ -3,15 +3,15 @@
 
 from socket import * 
 from ssl import *
-from utils import sendImage
+from utils import saveImage2File, sendImage
 import os 
 
 path = 'example.jpg'
 def run(ssl:bool):
-    addr, port = gethostname(), 12345
+    addr, port = gethostname(), 46625
     if ssl:
-        client = wrap_socket(socket(AF_INET, SOCK_STREAM), 'server.key', 'server.crt', False)
-        port = 12356
+        client = wrap_socket(socket(AF_INET, SOCK_STREAM), 'server.key', 'server.crt')
+        port = 46625
     else:
         client = socket(AF_INET, SOCK_STREAM)
     client.connect((addr,port))
@@ -19,4 +19,4 @@ def run(ssl:bool):
     client.close()
 
 if __name__ == '__main__':
-    run(True)
+    run(False)
