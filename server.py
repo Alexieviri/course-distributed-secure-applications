@@ -1,20 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import socket
-import ssl
+from socket import *
+from ssl import *
 from utils import saveImage2File, clearImage
-
-def run():
-    addr, port = socket.gethostname(), 12356
-    server = ssl.wrap_socket(socket.socket(), 'server.key', 'server.crt', True) # нужен сертификат и ключ
+path = 'server-example.jpg'
+def run(ssl:bool):
+    addr, port = gethostname(), 12356
+    if ssl:
+        server = wrap_socket(socket(AF_INET, SOCK_STREAM), 'server.key', 'server.crt', True)
+    else:
+        server = socket(AF_INET, SOCK_STREAM)
     server.bind((addr, port))
     server.listen()
     conn, addr = server.accept()
-    saveImage2File(conn, 'raw_duck.png')
-    clearImage('raw_duck.png')
+    saveImage2File(conn, path)
+    # clearImage(path)
     conn.close()
 
 
 if __name__ == '__main__':
-    run()
+    run(True)

@@ -1,17 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import socket
-import ssl
+from socket import * 
+from ssl import *
 from utils import sendImage
-import logging
+import os 
 
-def run():
-    client = ssl.wrap_socket(socket.socket())
-    addr, port = socket.gethostname(), 12345
+path = 'example.jpg'
+def run(ssl:bool):
+    addr, port = gethostname(), 12345
+    if ssl:
+        client = wrap_socket(socket(AF_INET, SOCK_STREAM), 'server.key', 'server.crt', False)
+        port = 12356
+    else:
+        client = socket(AF_INET, SOCK_STREAM)
     client.connect((addr,port))
-    sendImage(client, 'duck.png')
+    sendImage(client,path)
     client.close()
 
 if __name__ == '__main__':
-    run()
+    run(True)

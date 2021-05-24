@@ -1,12 +1,12 @@
 import socket
 from utils import sendImage, saveImage2File, greaseImage
-
+path = 'interseptor-example.jpg'
 def listenClient(addr: str, port: str):
     interseptor = socket.socket()
     interseptor.bind((addr, port))
     interseptor.listen()
     conn, addr = interseptor.accept()
-    saveImage2File(conn, 'duck_interseptor.png')
+    saveImage2File(conn, path)
     conn.close()
     interseptor.close()
 
@@ -15,9 +15,9 @@ def run():
     
     listenClient(addr, client_port)
     interseptor = socket.socket() # подключиться не получится, т.к соединение защищено
-    greaseImage('duck_interseptor.png', 0.1)
+    greaseImage(path, 0.1)
     interseptor.connect((addr, server_port))
-    sendImage(interseptor,'noisy_duck.png')
+    sendImage(interseptor,path)
     interseptor.close()
 
 if __name__=='__main__':
