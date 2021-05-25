@@ -11,7 +11,7 @@ def listenClient(addr: str, port: str):
     interseptor.close()
 
 def run():
-    addr, client_port, server_port = socket.gethostname(), 12345, 12356
+    addr, client_port, server_port = socket.gethostname(), 46626, 46625
     
     listenClient(addr, client_port)
     interseptor = socket.socket() # подключиться не получится, т.к соединение защищено

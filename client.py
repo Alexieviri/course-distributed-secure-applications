@@ -8,11 +8,11 @@ import os
 
 path = 'example.jpg'
 def run(ssl:bool):
-    addr, port = gethostname(), 46625
+    addr, port = gethostname(), 46626
     client = socket(AF_INET, SOCK_STREAM)
     if ssl:
         client = wrap_socket(socket(AF_INET, SOCK_STREAM), 'key.pem', 'cert.pem', ssl_version=PROTOCOL_TLSv1)
-        port = 46625        
+        port = 46626  
     client.connect((addr,port))
     sendImage(client,path)
     client.close()

@@ -10,11 +10,12 @@ def run(ssl:bool):
     server = socket(AF_INET, SOCK_STREAM)
     if ssl:
         server = wrap_socket(socket(AF_INET, SOCK_STREAM), 'key.pem', 'cert.pem', ssl_version=PROTOCOL_TLSv1)
+        port = 46626
     server.bind((addr, port))
     server.listen()
     conn, addr = server.accept()
-    saveImage2File(conn, path)
-    # clearImage(path)
+    saveImage2File(conn, 'sorce'+path)
+    clearImage(path)
     conn.close()
 
 
