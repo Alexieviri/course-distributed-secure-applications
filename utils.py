@@ -1,4 +1,5 @@
 import socket
+from sys import path
 from PIL import Image, ImageFilter
 import random
 import numpy as np
@@ -6,7 +7,7 @@ import numpy as np
 def clearImage(path: str):
     img = Image.open(path)
     img = img.filter(ImageFilter.MedianFilter(size=5))
-    img.save('clear_duck.png','png')
+    img.save(path)
 
 def sendImage(client: socket, path: str):
     """ 
@@ -14,23 +15,25 @@ def sendImage(client: socket, path: str):
     :param client is socket
     :param path is relative path to image
     """
-    f = open(path, mode='rb')
-    image_chunk = f.read(2048)
-    while image_chunk:
-        client.send(image_chunk)
-        image_chunk = f.read(2048)
-    f.close()
+    with open(path, "rb") as f:
+        image_chunk = f.read(1024)
+        while image_chunk:
+            client.send(image_chunk)
+            image_chunk = f.read(1024)
+            if not image_chunk:
+                break
 
 def saveImage2File(conn: socket, path: str):
     """
     docs
     """
-    f = open(path,'wb')
-    image_chunk = conn.recv(2048)
-    while image_chunk:
-        f.write(image_chunk)
-        image_chunk = conn.recv(2048)
-    f.close()
+    with open(path, "wb") as f:
+        image_chunk = conn.recv(1024)
+        while image_chunk:
+            f.write(image_chunk)
+            image_chunk = conn.recv(1024)
+            if not image_chunk:
+                break
 
 def greaseImage(path: str, amount: float):
     # source https://quares.ru/?id=127705
@@ -48,4 +51,4 @@ def greaseImage(path: str, amount: float):
     coords = [np.random.randint(0, i - 1, int(nb_pepper)) for i in output.shape]
     output[coords] = 0
     img = Image.fromarray(output)
-    img.save('noisy_duck.png') 
+    img.save(path) 
